@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +25,19 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/products', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/products/{product:id}', function () {
     return Inertia::render('Products/Show');
+})->name('products.show');
+Route::middleware(['auth:sanctum', 'verified'])->get('/products', function () {
+    return Inertia::render('Products/Index', [
+        'products' => Product::all(),
+    ]);
 })->name('products.index');
+Route::middleware(['auth:sanctum', 'verified'])->get('/checkout/{product:id}', [ProductController::class, 'checkout'])->name('checkout');
+//return $request->user()->checkoutCharge(1200, 'T-Shirt', 5);
