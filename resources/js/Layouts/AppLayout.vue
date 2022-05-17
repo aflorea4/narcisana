@@ -229,6 +229,14 @@
                                         >
                                             Manage Account
                                         </div>
+                                        <form @submit.prevent="submitBilling">
+                                            <jet-dropdown-link
+                                                type="submit"
+                                                @click.stop="submitBilling"
+                                            >
+                                                Billing Portal
+                                            </jet-dropdown-link>
+                                        </form>
 
                                         <jet-dropdown-link
                                             :href="route('profile.show')"
@@ -499,6 +507,7 @@ export default defineComponent({
 
     data() {
         return {
+            redirectForm: this.$inertia.form({}),
             showingNavigationDropdown: false,
         };
     },
@@ -518,6 +527,10 @@ export default defineComponent({
 
         logout() {
             this.$inertia.post(route("logout"));
+        },
+
+        submitBilling() {
+            this.redirectForm.post(route("billing.portal"));
         },
     },
 });

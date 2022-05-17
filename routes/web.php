@@ -39,5 +39,22 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/products', function () {
         'products' => Product::all(),
     ]);
 })->name('products.index');
+Route::middleware(['auth:sanctum', 'verified'])->get('/products/{product:id}', function (Product $product) {
+    return Inertia::render('Products/Show', [
+        'product' => $product,
+    ]);
+})->name('products.show');
 Route::middleware(['auth:sanctum', 'verified'])->get('/checkout/{product:id}', [ProductController::class, 'checkout'])->name('checkout');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/checkout/{product:id}/multiple', [ProductController::class, 'checkoutMultiple'])->name('checkout.products');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/billing-portal', function (Request $request) {
+    dd($request->user()->redirectToBillingPortal());
+
+    // return Inertia::render('Products/Index', [
+    //     'products' => Product::all(),
+    //     'bp_url' => $request->user()->redirectToBillingPortal()->targetUrl
+    // ]);
+})->name('billing.portal');
+
 //return $request->user()->checkoutCharge(1200, 'T-Shirt', 5);

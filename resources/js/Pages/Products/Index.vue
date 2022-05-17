@@ -86,6 +86,14 @@
                                                         >Quick Buy</jet-button
                                                     >
                                                     <jet-button
+                                                        @click.stop="
+                                                            $inertia.visit(
+                                                                route(
+                                                                    'products.show',
+                                                                    product.id
+                                                                )
+                                                            )
+                                                        "
                                                         >View
                                                         Product</jet-button
                                                     >
@@ -110,7 +118,7 @@ import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
 import JetButton from "@/Jetstream/Button.vue";
 
 export default defineComponent({
-    props: ["products"],
+    props: ["products", "checkout_url", "bp_url"],
 
     components: {
         AppLayout,
@@ -122,6 +130,15 @@ export default defineComponent({
         quickBuy(id) {
             this.$inertia.visit(route("checkout", id));
         },
+    },
+
+    mounted() {
+        if (this.checkout_url != null) {
+            window.location.href = this.checkout_url;
+        }
+        if (this.bp_url != null) {
+            window.location.href = this.bp_url;
+        }
     },
 });
 </script>
